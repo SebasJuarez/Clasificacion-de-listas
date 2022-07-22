@@ -23,7 +23,7 @@ class LabTest {
                     && result.get(1).info?.lowercase() == "l5"
         )
         assertTrue(
-            result.get(2).originalPos == 2
+            result.get(2).originalPos == 3
                     && result.get(2).originalValue == true
                     && result.get(2).type?.lowercase() == "booleano"
                     && result.get(2).info?.lowercase() == "verdadero"
@@ -114,7 +114,7 @@ class LabTest {
         )
 
         assertTrue(
-            result.get(8).originalPos == 8
+            result.get(8).originalPos == 9
                     && result.get(8).originalValue == 2.0
                     && result.get(8).type == null
                     && result.get(8).info == null
@@ -132,67 +132,20 @@ data class ItemData(
 // -----------------------
 
 fun processList(inputList: List<Any?>?): List<ItemData>? {
-   var inf: String? = ""
-    var tipo: String? = ""
-    var cont: Int = 0
-    var pos: Int = 0
-    
-    val llist = ArrayList<ItemData>()
+val llist = ArrayList<ItemData>()
     if (inputList == null) return null
-    
-    for (i in inputList){
+    for((index, i) in inputList.withIndex()){
        if (i != null){
-        
-       pos = cont
-       cont = cont + 1 
-        
-        when (i) {
-            is String -> {
-                tipo = "Cadena"
-            	inf = ("L" + i.length)}
-            is Int -> {
-                tipo = "Entero"
-                if (i%10 == 0){
-                    inf = "M10"
-                }
-                else if (i%5 == 0){
-                    inf = "M5"
-                }
-                else if (i%2 == 0){
-                    inf = "M2"
-                }
-                else{
-                    inf = null
-                }
-            }
-            
-            is Boolean -> {
-                tipo = "Booleano"
-                if (i == true){
-                    inf = "Verdadero"
-                }
-                else if(i == false){
-                    inf = "Falso"
-                }
-            }
-            else -> {
-                tipo = null
-                inf = null
-            }
-  
-        }
-        val element = ItemData (
-            originalPos = pos,
-            originalValue = i,
-            type = tipo,
-            info = inf)
-            
-        llist.add(element)
-    }
-     
-    
-
-
-  }
+        val itemData:ItemData = when (i) {
+            is String -> ItemData(index, i, "Cadena", "L" + i.length)
+            is Int -> 
+                when {
+                   	i%10 == 0 -> ItemData(index, i, "Entero", "M10")
+                	i%5 == 0 -> ItemData(index, i, "Entero", "M5")
+                	i%2 == 0 -> ItemData(index, i, "Entero", "M2")
+                    else -> ItemData(index, i, "Entero", null)}
+            is Boolean -> ItemData(index, i, "Booleano", if (i) "Verdadero" else "Falso")
+            else -> ItemData(index, i, null, null)}
+           llist.add(itemData)}}
     return llist
 }

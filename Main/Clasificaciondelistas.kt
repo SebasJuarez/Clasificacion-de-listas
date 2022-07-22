@@ -14,67 +14,20 @@ fun main() {
 }
     
 
-fun processList(inputList: List<Any?>?): List<ItemData>? {
-    var inf: String? = ""
-    var tipo: String? = ""
-    var cont: Int = 0
-    var pos: Int = 0
-    
+fun processList(inputList: List<Any?>?): List<ItemData>? { 
     val llist = ArrayList<ItemData>()
     if (inputList == null) return null
-    
-    for (i in inputList){
+    for((index, i) in inputList.withIndex()){
        if (i != null){
-        
-       pos = cont
-       cont = cont + 1 
-        
-        when (i) {
-            is String -> {
-                tipo = "Cadena"}
-            is Int -> {
-                tipo = "Entero"
-                if (i%10 == 0){
-                    inf = "M10"
-                }
-                else if (i%5 == 0){
-                    inf = "M5"
-                }
-                else if (i%2 == 0){
-                    inf = "M2"
-                }
-                else{
-                    inf = null
-                }
-            }
-            
-            is Boolean -> {
-                tipo = "Booleano"
-                if (i == true){
-                    inf = "Verdadero"
-                }
-                else if(i == false){
-                    inf = "Falso"
-                }
-            }
-            else -> {
-                tipo = null
-                inf = null
-            }
-  
-        }
-        val element = ItemData (
-            originalPos = pos,
-            originalValue = i,
-            type = tipo,
-            info = inf)
-            
-        llist.add(element)
-    }
-     
-    
-
-
-  }
-    return llist
-}
+        val itemData:ItemData = when (i) {
+            is String -> ItemData(index, i, "Cadena", "L" + i.length)
+            is Int -> 
+                when {
+                   	i%10 == 0 -> ItemData(index, i, "Entero", "M10")
+                	i%5 == 0 -> ItemData(index, i, "Entero", "M5")
+                	i%2 == 0 -> ItemData(index, i, "Entero", "M2")
+                    else -> ItemData(index, i, "Entero", null)}
+            is Boolean -> ItemData(index, i, "Booleano", if (i) "Verdadero" else "Falso")
+            else -> ItemData(index, i, null, null)}
+           llist.add(itemData)}}
+    return llist}
